@@ -5,26 +5,24 @@ import Message from "./Message/Message";
 import { Navigate } from 'react-router-dom';
 import { sendMessage, updateNewMessageBody } from '../../redux/dialogs-reducer-slice';
 import { useDispatch, useSelector } from 'react-redux';
+import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+import { compose } from 'redux';
 
 const Dialogs = () => {
     let dispatch = useDispatch()
 
-    let dialosPage = useSelector(store => store.dialosPage)
-    let isAuth = useSelector(store => store.auth.isAuth)
+    let dialosPage = useSelector(store => store.dialogsPage)
+    // let isAuth = useSelector(store => store.auth.isAuth)
     debugger
     let dialogsElements = dialosPage.dialogs.map(d => <DialogItem name={d.name} key={d.id} id={d.id} />);
     let messagesElements = dialosPage.messages.map(m => <Message message={m.message} key={m.id} />);
     let newMessageBody = dialosPage.newMessageBody;
-    
+
 
 
     let onSendMessageClick = () => {
         dispatch(sendMessage())
     }
-
-    // let updateNewMessageBody = (body) => {
-    //     dispatch(updateNewMessageBodyCreator(body));
-    // }
 
     let onNewMessageChange = (e) => {
         let body = e.target.value;
@@ -49,8 +47,14 @@ const Dialogs = () => {
     //     props.updateNewMessageBody(body);
     // }
 
+    // let AuthRedirectComponent = (props) => {
+    //     if (!props.isAuth) return <Navigate to={`/login`} />
+    //     return <Dialogs {...props} />
+    // }
 
-    // if (!props.isAuth) return <Navigate to={`/login`} />
+    // let AuthRedirectComponent = withAuthRedirect(Dialogs)
+    // AuthRedirectComponent()
+
 
     return (
         <div className={s.dialogs}>
@@ -70,4 +74,6 @@ const Dialogs = () => {
     )
 }
 
-export default Dialogs;
+export default compose(withAuthRedirect)(Dialogs)
+
+// export default Dialogs;

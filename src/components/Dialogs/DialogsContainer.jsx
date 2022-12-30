@@ -1,25 +1,42 @@
 import React from 'react';
-import { sendMessageCreator, updateNewMessageBodyCreator } from "../../redux/dialogs-reducer";
+import { useDispatch, useSelector } from 'react-redux';
+import { compose } from 'redux';
+import DialogItem from './DialogItem/DialogItem';
 import Dialogs from "./Dialogs";
-import { connect } from "react-redux";
+import Message from './Message/Message';
 
-// let mapStateToProps = (state) => {
-//     return {
-//         dialogsPage: state.dialogsPage,
-//         isAuth: state.auth.isAuth
-//     }
-// }
-// let mapDispatchToProps = (dispatch) => {
-//     return {
-//         sendMessage: () => {
-//             dispatch(sendMessageCreator());
-//         },
-//         updateNewMessageBody: (body) => {
-//             dispatch(updateNewMessageBodyCreator(body));
-//         }
-//     }
-// }
+const DialogsContainer = () => {
 
-// const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
+    // let dialosPage = useSelectortor(store => store.dialosPage)
+    // let isAuth = useSelector(store => store.auth.isAuth)
+    // debugger
+    // let dialogsElements = dialosPage.dialogs.map(d => <DialogItem name={d.name} key={d.id} id={d.id} />);
+    // let messagesElements = dialosPage.messages.map(m => <Message message={m.message} key={m.id} />);
+    // let newMessageBody = dialosPage.newMessageBody;
+
+
+
+    // let onSendMessageClick = () => {
+    //     dispatch(sendMessage())
+    // }
+
+    // let onNewMessageChange = (e) => {
+    //     let body = e.target.value;
+    //     dispatch(updateNewMessageBody(body));
+    // }
+
+    // let AuthRedirectComponent = withAuthRedirect(Dialogs)
+    // return AuthRedirectComponent
+
+    // return <>
+    //     <Dialogs
+    //         isAuth={isAuth}
+    //         dialogsElements={dialogsElements}
+    //         messagesElements={messagesElements}
+    //         newMessageBody={newMessageBody} />
+    // </>
+
+}
+// export default compose()(DialogsContainer)
 
 // export default DialogsContainer;

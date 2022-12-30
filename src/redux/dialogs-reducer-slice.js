@@ -22,7 +22,7 @@ let initialState = {
 };
 
 
-const usersReducerSlice = createSlice({
+const dialogsReducerSlice = createSlice({
     name: 'dialogsReducerSlice',
     initialState,
     reducers: {
@@ -38,5 +38,5 @@ const usersReducerSlice = createSlice({
 })
 
 
-export default usersReducerSlice.reducer
-export const { updateNewMessageBody, sendMessage } = usersReducerSlice.actions
+export default dialogsReducerSlice.reducer
+export const { updateNewMessageBody, sendMessage } = dialogsReducerSlice.actions
