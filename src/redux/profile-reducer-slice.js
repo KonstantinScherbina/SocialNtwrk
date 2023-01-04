@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { usersAPI } from "../api/api";
+import { profileAPI, usersAPI } from "../api/api";
 
 
 export const fetchGetProfile = createAsyncThunk(
@@ -12,13 +12,33 @@ export const fetchGetProfile = createAsyncThunk(
     }
 )
 export const fetchGetMyProfile = createAsyncThunk(
-    'profileReducerSlice/fetchGetProfile', async (myId, { rejectWithValue, dispatch }) => {
+    'profileReducerSlice/fetchGetMyProfile', async (myId, { rejectWithValue, dispatch }) => {
         dispatch(toggleIsFetchingAction(true))
         const getMyProfileUserId = await usersAPI.getMyProfile(myId)
         dispatch(toggleIsFetchingAction(false))
         dispatch(setUserProfileAction(getMyProfileUserId))
         debugger
     }
+)
+export const getStatus = createAsyncThunk(
+    'profileReducerSlice/getStatus', async (userId, { rejectWithValue, dispatch }) => {
+        const getStatus = await usersAPI.getStatus(userId)
+        dispatch(setUserStatus(getStatus))
+        debugger
+    }
+)
+export const updateStatus = createAsyncThunk(
+    'profileReducerSlice/updateStatus', async (status, { rejectWithValue, dispatch }) => {
+        const resultCodeStatus = await usersAPI.updateStatus(status)
+        debugger
+
+        if (resultCodeStatus.resultCode === 0) {
+            dispatch(setUserStatus(status))
+            debugger
+        }
+
+    }
+
 )
 
 const profileReducerSlice = createSlice({
@@ -27,6 +47,7 @@ const profileReducerSlice = createSlice({
         isFetching: true,
         newPostText: 'Your Post',
         profile: null,
+        status: '',
         posts: [
             { id: 1, message: 'Hi, how are you?', likesCount: 12 },
             { id: 2, message: 'It\'s my first post', likesCount: 11 },
@@ -52,9 +73,13 @@ const profileReducerSlice = createSlice({
         },
         setUserProfileAction(state, action) {
             state.profile = action.payload
-        }
+        },
+        setUserStatus(state, action) {
+            state.status = action.payload
+            debugger
+        },
     }
 })
 
 export default profileReducerSlice.reducer
-export const { addPostAction, updateNewpostTextAction, toggleIsFetchingAction, setUserProfileAction } = profileReducerSlice.actions
+export const { addPostAction, updateNewpostTextAction, toggleIsFetchingAction, setUserProfileAction, setUserStatus } = profileReducerSlice.actions
