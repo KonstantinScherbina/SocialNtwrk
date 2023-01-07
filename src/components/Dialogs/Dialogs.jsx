@@ -13,7 +13,6 @@ const Dialogs = () => {
 
     let dialosPage = useSelector(store => store.dialogsPage)
     // let isAuth = useSelector(store => store.auth.isAuth)
-    debugger
     let dialogsElements = dialosPage.dialogs.map(d => <DialogItem name={d.name} key={d.id} id={d.id} />);
     let messagesElements = dialosPage.messages.map(m => <Message message={m.message} key={m.id} />);
     let newMessageBody = dialosPage.newMessageBody;

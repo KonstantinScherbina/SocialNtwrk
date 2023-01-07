@@ -8,6 +8,7 @@ import Users from "./components/Users/Users";
 import { HeaderContainer } from './components/Header/HeaderContainer';
 import LoginPage from './components/Login/Login';
 import Dialogs from './components/Dialogs/Dialogs';
+import UsersContainer from './components/Users/UsersContainer';
 
 
 const App = () => {
@@ -21,7 +22,7 @@ const App = () => {
                     <Route path='/dialogs' element={<Dialogs />} />
                     <Route path='/profile' element={<Profile />} />
                     <Route path='/profile/:userId' element={<Profile />} />
-                    <Route path='/users' element={<Users />} />
+                    <Route path='/users' element={<UsersContainer />} />
                     <Route path='/login' element={<LoginPage />} />
                 </Routes>
             </div>
