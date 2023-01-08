@@ -8,7 +8,7 @@ export const fetchGetProfile = createAsyncThunk(
         const getProfileUserId = await usersAPI.getProfile(userId)
         dispatch(toggleIsFetchingAction(false))
         dispatch(setUserProfileAction(getProfileUserId))
-        debugger
+
     }
 )
 export const fetchGetMyProfile = createAsyncThunk(
@@ -17,24 +17,24 @@ export const fetchGetMyProfile = createAsyncThunk(
         const getMyProfileUserId = await usersAPI.getMyProfile(myId)
         dispatch(toggleIsFetchingAction(false))
         dispatch(setUserProfileAction(getMyProfileUserId))
-        debugger
+
     }
 )
 export const getStatus = createAsyncThunk(
     'profileReducerSlice/getStatus', async (userId, { rejectWithValue, dispatch }) => {
         const getStatus = await usersAPI.getStatus(userId)
         dispatch(setUserStatus(getStatus))
-        debugger
+
     }
 )
 export const updateStatus = createAsyncThunk(
     'profileReducerSlice/updateStatus', async (status, { rejectWithValue, dispatch }) => {
         const resultCodeStatus = await usersAPI.updateStatus(status)
-        debugger
+
 
         if (resultCodeStatus.resultCode === 0) {
             dispatch(setUserStatus(status))
-            debugger
+
         }
 
     }
@@ -76,7 +76,7 @@ const profileReducerSlice = createSlice({
         },
         setUserStatus(state, action) {
             state.status = action.payload
-            debugger
+
         },
     }
 })

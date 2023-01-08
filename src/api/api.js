@@ -34,8 +34,20 @@ export const usersAPI = {
             .then(response => { return response.data })
     },
 
-    authAPI() {
+    authAPIMe() {
         return instance.get(`auth/me`)
+            .then(response => { return response.data })
+    },
+
+    authAPILogIn(email, password, rememberMe = false) {
+        debugger
+        return instance.post(`auth/login`, { email, password, rememberMe })
+            .then(response => { return response.data })
+    },
+
+    authAPILogOut() {
+        debugger
+        return instance.delete(`auth/login`)
             .then(response => { return response.data })
     },
 

@@ -23,13 +23,10 @@ const ProfileStatusWithHooks = () => {
     const deactivateEditMode = () => {
         setEditMode(false)
         dispatch(updateStatus(status))
-
-        debugger
     }
 
     const onStatusChange = (e) => {
         setStatus(e.currentTarget.value)
-        debugger
     }
 
     return (

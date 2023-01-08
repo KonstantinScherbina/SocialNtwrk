@@ -34,7 +34,7 @@ const ProfileInfo = () => {
         }
     }, [userId, myId])
 
-    debugger
+  
     if (!profile || !myId) {
         return <Preloader />
     } return (
