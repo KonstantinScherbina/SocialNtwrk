@@ -15,9 +15,12 @@ export const login = createAsyncThunk(
     'authReducerSlice/login', async (data, { rejectWithValue, dispatch }) => {
         const { email, password, rememberMe } = data
         const logIn = await usersAPI.authAPILogIn(email, password, rememberMe)
+        debugger
         if (logIn.resultCode === 0) {
             debugger
             dispatch(getAuthUserData())
+        } else {
+            dispatch(setUserDataAction({ isError: true, errorMessage: logIn.messages }))
         }
     }
 )
@@ -38,7 +41,9 @@ const authReducerSlice = createSlice({
         id: null,
         login: null,
         email: null,
-        isAuth: false
+        isAuth: false,
+        isError: false,
+        errorMessage: null
     },
     reducers: {
         setUserDataAction(state, action) {
@@ -46,6 +51,9 @@ const authReducerSlice = createSlice({
             state.login = action.payload.login
             state.email = action.payload.email
             state.isAuth = action.payload.isAuth
+            state.isError = action.payload.isError
+            state.errorMessage = action.payload.errorMessage
+            debugger
         }
     }
 })

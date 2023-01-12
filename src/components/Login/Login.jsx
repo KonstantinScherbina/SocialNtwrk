@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
@@ -7,23 +7,40 @@ import { login } from "../../redux/auth-reducer-slice";
 
 const Login = () => {
 
+    const isErrorSelector = useSelector((store) => store.auth.isError)
+    const isErrorMessageSelector = useSelector((store) => store.auth.errorMessage)
+
+    const [isError, setIsError] = useState(isErrorSelector)
+    const [isErrorMessage, setIsErrorMessage] = useState(isErrorMessageSelector)
+
     const isAuth = useSelector((store) => store.auth.isAuth)
+
+    useEffect(() => {
+        setIsError(isErrorSelector)
+        setIsErrorMessage(isErrorMessageSelector)
+    }, [isErrorSelector])
+
+    debugger
+
     if (isAuth) {
         return <Navigate replace to="/profile" />
     } return <div>
         <h1>Login</h1>
-        <LoginForm />
+        <LoginForm isError={isError} isErrorMessage={isErrorMessage} />
     </div>
 }
 
 
-const LoginForm = () => {
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+
+const LoginForm = (props) => {
+
+    const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur"
     });
 
     const dispatch = useDispatch()
+
 
     const onSubmit = (data) => {
         dispatch(login(data))
@@ -35,19 +52,23 @@ const LoginForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <div>
                 Email:
-                <input {...register("email", { required: true })} />
+                <input type={"email"} {...register("email", { required: true })} />
+                <div>{errors.email && errors.email.message}</div>
             </div>
-            <div>{errors?.email && <p>Error!</p>}</div>
             <div>
                 Password:
                 <input type={"password"} {...register("password", { required: true })} />
+                <div>{errors.password && errors.password.message}</div>
             </div>
             <div>
                 Remember Me
                 <input type={"checkbox"} {...register("rememberMe")} />
             </div>
-            {errors.email && <span>This field is required</span>}
-            {errors.password && <span>This field is required</span>}
+
+            <div>
+                {props.isError && props.isErrorMessage}
+            </div>
+
 
             <input type="submit" />
         </form>
