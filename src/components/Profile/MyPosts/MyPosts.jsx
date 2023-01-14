@@ -13,8 +13,9 @@ const MyPosts = () => {
 
     // const [state, dispatch] = useReducer(profileReducer, initialState)
 
+    console.log("RENDER")
+
     const { posts, newPostText } = useSelector((state) => state.profilePage)
-    
 
     const dispatch = useDispatch()
 
@@ -27,7 +28,7 @@ const MyPosts = () => {
         let text = newPostElement.current.value;
         dispatch(updateNewpostTextAction(text))
     }
-   
+
 
     let postsElements =
         posts.map(p => <Post message={p.message} likesCount={p.likesCount} />)

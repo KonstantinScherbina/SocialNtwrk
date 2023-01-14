@@ -8,7 +8,9 @@ export const getAuthUserData = createAsyncThunk(
             const { id, login, email } = userData.data
             dispatch(setUserDataAction({ id, login, email, isAuth: true }))
         }
+        return userData
     }
+
 )
 
 export const login = createAsyncThunk(

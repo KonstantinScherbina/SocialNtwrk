@@ -1,18 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import Profile from './components/Profile/Profile';
 import { Route, Routes } from "react-router-dom";
-import DialogsContainer from "./components/Dialogs/DialogsContainer";
-import Users from "./components/Users/Users";
 import { HeaderContainer } from './components/Header/HeaderContainer';
 import LoginPage from './components/Login/Login';
 import Dialogs from './components/Dialogs/Dialogs';
 import UsersContainer from './components/Users/UsersContainer';
+import { useDispatch, useSelector } from 'react-redux';
+import Preloader from './components/common/Preloader/Preloader';
+import { initializApp } from './redux/app-reducer-slice';
 
 
 const App = () => {
-    return (
+
+    const dispatch = useDispatch()
+
+    const initialized = useSelector(store => store.app.initialized)
+
+    useEffect(() => {
+        dispatch(initializApp())
+    }, [initialized])
+
+
+
+    if (!initialized) {
+        return <Preloader />
+    } return (
 
         <div className='app-wrapper'>
             <HeaderContainer />
