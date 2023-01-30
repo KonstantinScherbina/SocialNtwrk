@@ -9,20 +9,23 @@ const instance = axios.create({
 
 
 export const usersAPI = {
-    getUsersCurrentPage(currentPage = 1) {
-        return instance.get(`users?page=${currentPage}`)
-            .then(response => { return response.data })
-    },
+    // getUsersCurrentPage(currentPage = 1) {
+    //     return instance.get(`users?page=${currentPage}`)
+    //         .then(response => { return response.data })
+    // },
 
+    // request to api for get portional users will be returned in response
     getUsersPageSize(pageSize = 10) {
         return instance.get(`users?count=${pageSize}`)
             .then(response => { return response.data })
     },
 
+    // request to api for get users
     getUsersPageNumber(pageNumber) {
         return instance.get(`users?page=${pageNumber}`)
             .then(response => { return response.data })
     },
+
 
     deleteUserSubscribe(u) {
         return instance.delete(`follow/${u.id}`)
@@ -67,7 +70,32 @@ export const usersAPI = {
     updateStatus(status) {
         return instance.put(`profile/status`, { status })
             .then(response => { return response.data })
-    }
+    },
 
+    savePhoto(photoFile) {
+        const formData = new FormData();
+        formData.append("image", photoFile)
+
+        debugger
+        return instance.put(`profile/photo`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then(response => { return response.data })
+    },
+
+    updateProfileInfo(profile_Info) {
+        return instance.put(`profile/`, profile_Info)
+            .then(response => { return response.data })
+    },
+
+}
+
+export const securityAPI = {
+    getCaptchaUrl() {
+        return instance.get(`security/get-captcha-url`)
+            .then(response => { return response.data })
+    }
 }
 

@@ -6,6 +6,7 @@ import { compose } from 'redux';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 
 const Profile = () => {
+    debugger
     return (
         <div>
             <ProfileInfo />

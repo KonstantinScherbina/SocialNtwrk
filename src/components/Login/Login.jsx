@@ -7,18 +7,21 @@ import { login } from "../../redux/auth-reducer-slice";
 
 const Login = () => {
 
-    const isErrorSelector = useSelector((store) => store.auth.isError)
-    const isErrorMessageSelector = useSelector((store) => store.auth.errorMessage)
+    const errorCodeFromAPI = useSelector((store) => store.auth.isError)
+    const errorMessageFromAPI = useSelector((store) => store.auth.errorMessage)
+    const captcha = useSelector((store) => store.auth.captchaObj.captcha)
 
-    const [isError, setIsError] = useState(isErrorSelector)
-    const [isErrorMessage, setIsErrorMessage] = useState(isErrorMessageSelector)
+    debugger
+
+    // const [isError, setIsError] = useState(isErrorSelector)
+    // const [isErrorMessage, setIsErrorMessage] = useState(isErrorMessageSelector)
 
     const isAuth = useSelector((store) => store.auth.isAuth)
 
-    useEffect(() => {
-        setIsError(isErrorSelector)
-        setIsErrorMessage(isErrorMessageSelector)
-    }, [isErrorSelector])
+    // useEffect(() => {
+    //     setIsError(isErrorSelector)
+    //     setIsErrorMessage(isErrorMessageSelector)
+    // }, [isErrorSelector])
 
     debugger
 
@@ -26,21 +29,24 @@ const Login = () => {
         return <Navigate replace to="/profile" />
     } return <div>
         <h1>Login</h1>
-        <LoginForm isError={isError} isErrorMessage={isErrorMessage} />
+        <LoginForm
+            errorCodeFromAPI={errorCodeFromAPI}
+            errorMessageFromAPI={errorMessageFromAPI}
+            captcha={captcha} />
     </div>
 }
 
 
-
-
 const LoginForm = (props) => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
         mode: "onBlur"
     });
 
+    debugger
     const dispatch = useDispatch()
 
+    console.log("errors", errors)
 
     const onSubmit = (data) => {
         dispatch(login(data))
@@ -52,13 +58,23 @@ const LoginForm = (props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <div>
                 Email:
-                <input type={"email"} {...register("email", { required: true })} />
-                <div>{errors.email && errors.email.message}</div>
+                <input type={"email"} placeholder="Email" {...register("email", {
+                    required: "Please enter your email.",
+                    pattern:
+                    {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "invalid email address"
+                    }
+                })} />
+                <div>{errors?.email?.type === "required" && errors.email.message}</div>
+                <div>{errors?.email?.type === "pattern" && errors.email.message}</div>
             </div>
             <div>
                 Password:
-                <input type={"password"} {...register("password", { required: true })} />
-                <div>{errors.password && errors.password.message}</div>
+                <input type={"password"} placeholder="Password" {...register("password", { required: "Please enter your password.", minLength: { value: 4, message: "Minimal characters 4" } })} />
+                <div>{errors?.password?.type === "required" && errors.password.message}</div>
+                <div>{errors?.password?.type === "minLength" && errors.password.message}
+                </div>
             </div>
             <div>
                 Remember Me
@@ -66,9 +82,10 @@ const LoginForm = (props) => {
             </div>
 
             <div>
-                {props.isError && props.isErrorMessage}
+                {props.errorCodeFromAPI && props.errorMessageFromAPI}
             </div>
 
+            <div>{props.captcha && <img src={props.captcha} />}</div>
 
             <input type="submit" />
         </form>
