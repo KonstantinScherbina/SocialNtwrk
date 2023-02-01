@@ -10,13 +10,7 @@ let initialState = {
         { id: 5, name: 'Viktor' },
         { id: 6, name: 'Valera' }
     ],
-    messages: [
-        { id: 1, message: 'Hi' },
-        { id: 2, message: 'How is your it-kamasutra?' },
-        { id: 3, message: 'Yo' },
-        { id: 4, message: 'Yo' },
-        { id: 5, message: 'Yo' }
-    ],
+    messages: [],
     newMessageBody: ""
 };
 
@@ -26,12 +20,15 @@ const dialogsReducerSlice = createSlice({
     initialState,
     reducers: {
         updateNewMessageBody(state, action) {
+            debugger
             state.newMessageBody = action.payload
         },
-        sendMessage(state, action) {
-            let body = state.newMessageBody
+        sendMessage(state) {
+            debugger
+            const newMessage = state.newMessageBody
+            state.messages.push(newMessage)
             state.newMessageBody = ''
-            state.messages = { id: 6, message: body }
+            debugger
         }
     }
 })

@@ -8,8 +8,7 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { usersAPI } from '../../api/api';
 
-
-
+// Component of Users
 let Users = (props) => {
 
     let dispatch = useDispatch()
@@ -34,33 +33,20 @@ let Users = (props) => {
     }
 
 
-    //-----------------------------------
-
     let portionCount = Math.ceil(props.pagesCount / props.portionSize)
     let [portionNumber, setPortionNumber] = useState(1)
     let leftPortionPageNumber = (portionNumber - 1) * props.portionSize + 1
     let rightPortionPageNumber = portionNumber * props.portionSize
 
-    useEffect(() => setPortionNumber(Math.ceil(props.currentPage / props.portionSize)), [props.currentPage]);
+    // show new portion of pages left or right
+    useEffect(() => {
+        setPortionNumber(Math.ceil(props.currentPage / props.portionSize))
+    }, [props.currentPage]);
 
     if (props.isFetching) {
         return <Preloader />
     } return <div>
         <div>
-            {/* {pages.map(p => {
-                return <span className={props.currentPage === p && styles.selectedPage}
-                    onClick={() => { onPageChanged(p) }}>{p}</span>
-            })} */}
-
-            {/* <Paginator
-                totalItemsCount={props.totalItemsCount}
-                pageSize={props.spageSize}
-                currentPage={props.currentPage}
-                pagesCount={props.pagesCount}
-                portionSize={props.portionSize} /> */}
-
-
-
             {portionNumber > 1 &&
                 <button onClick={() => { setPortionNumber(portionNumber - 1) }}>PREV</button>}
 
@@ -68,10 +54,6 @@ let Users = (props) => {
                 return <span key={p} onClick={(e) => { onPageChanged(p) }}>{p}</span>
             })}
             {portionCount > portionNumber && <button onClick={() => { setPortionNumber(portionNumber + 1) }}>NEXT</button>}
-
-
-
-
         </div>
         <div>
             {props.users.map(u => <div key={u.id}>
@@ -80,7 +62,6 @@ let Users = (props) => {
                         <NavLink to={`/profile/${u.id}`}>
                             <img src={u.photos.small != null ? u.photos.small : userPhoto} className={styles.userPhoto} />
                         </NavLink>
-
                     </div>
                     <div>
                         {u.followed

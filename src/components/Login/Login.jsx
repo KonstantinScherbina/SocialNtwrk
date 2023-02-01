@@ -5,23 +5,16 @@ import { Navigate } from "react-router-dom";
 import { login } from "../../redux/auth-reducer-slice";
 // import "./styles.css";
 
+// loginForm
 const Login = () => {
 
     const errorCodeFromAPI = useSelector((store) => store.auth.isError)
     const errorMessageFromAPI = useSelector((store) => store.auth.errorMessage)
-    const captcha = useSelector((store) => store.auth.captchaObj.captcha)
+    const captchaFromAPI = useSelector((store) => store.auth.captchaObj.captcha)
 
     debugger
 
-    // const [isError, setIsError] = useState(isErrorSelector)
-    // const [isErrorMessage, setIsErrorMessage] = useState(isErrorMessageSelector)
-
     const isAuth = useSelector((store) => store.auth.isAuth)
-
-    // useEffect(() => {
-    //     setIsError(isErrorSelector)
-    //     setIsErrorMessage(isErrorMessageSelector)
-    // }, [isErrorSelector])
 
     debugger
 
@@ -32,14 +25,14 @@ const Login = () => {
         <LoginForm
             errorCodeFromAPI={errorCodeFromAPI}
             errorMessageFromAPI={errorMessageFromAPI}
-            captcha={captcha} />
+            captchaFromAPI={captchaFromAPI} />
     </div>
 }
 
 
 const LoginForm = (props) => {
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur"
     });
 
@@ -66,13 +59,17 @@ const LoginForm = (props) => {
                         message: "invalid email address"
                     }
                 })} />
+                {/* error of required */}
                 <div>{errors?.email?.type === "required" && errors.email.message}</div>
+                {/* error of pattern */}
                 <div>{errors?.email?.type === "pattern" && errors.email.message}</div>
             </div>
             <div>
                 Password:
                 <input type={"password"} placeholder="Password" {...register("password", { required: "Please enter your password.", minLength: { value: 4, message: "Minimal characters 4" } })} />
+                {/* error of required */}
                 <div>{errors?.password?.type === "required" && errors.password.message}</div>
+                {/* error of minLength required */}
                 <div>{errors?.password?.type === "minLength" && errors.password.message}
                 </div>
             </div>
@@ -82,10 +79,11 @@ const LoginForm = (props) => {
             </div>
 
             <div>
+                {/* error from API */}
                 {props.errorCodeFromAPI && props.errorMessageFromAPI}
             </div>
 
-            <div>{props.captcha && <img src={props.captcha} />}</div>
+            <div>{props.captchaFromAPI && <img src={props.captchaFromAPI} />}</div>
 
             <input type="submit" />
         </form>

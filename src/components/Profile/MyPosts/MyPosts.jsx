@@ -8,31 +8,44 @@ import profileReducerSlice from '../../../redux/profile-reducer-slice';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 
+
+// my posts on profile page
 const MyPosts = () => {
 
-    // const [state, dispatch] = useReducer(profileReducer, initialState)
 
     console.log("RENDER")
 
-    const { posts, newPostText } = useSelector((state) => state.profilePage)
+    // const { posts, newPostText } = useSelector((state) => state.profilePage.posts)
+    const posts = useSelector((state) => state.profilePage.posts)
 
+
+    debugger
+    const [newPostText, setNewPostText] = useState()
     const dispatch = useDispatch()
 
+    // const newPostText = ''
+
     let onAddPost = () => {
-        dispatch(addPostAction())
+        dispatch(addPostAction(newPostText))
+        setNewPostText('')
     }
 
-    let newPostElement = React.createRef();
-    let onPostChange = () => {
-        let text = newPostElement.current.value;
-        dispatch(updateNewpostTextAction(text))
+    // let newPostElement = React.createRef();
+    let onPostChange = (e) => {
+        debugger
+        let text = e.target.value
+        debugger
+        // dispatch(updateNewpostTextAction(text))
+        (setNewPostText(text))
     }
 
+    debugger
 
-    let postsElements =
-        posts.map(p => <Post message={p.message} likesCount={p.likesCount} />)
+    let postsElements = posts.map(p => <Post message={p.message} likesCount={p.likesCount} />)
 
+    debugger
 
 
     return (
@@ -40,7 +53,9 @@ const MyPosts = () => {
             <h3>My posts</h3>
             <div>
                 <div>
-                    <textarea onChange={onPostChange} ref={newPostElement}
+                    <textarea
+                        onChange={onPostChange}
+                        placeholder="Enter your post"
                         value={newPostText} />
                 </div>
                 <div>

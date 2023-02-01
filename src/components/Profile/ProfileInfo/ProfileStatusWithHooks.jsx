@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { updateStatus } from "../../../redux/profile-reducer-slice"
 
+
+// status of user on a page
 const ProfileStatusWithHooks = () => {
 
     const dispatch = useDispatch()
@@ -15,7 +17,7 @@ const ProfileStatusWithHooks = () => {
         setStatus(status)
     }, [userStatus])
 
-
+    // activate mod for editing status
     const activateEditMode = () => {
         setEditMode(true)
     }
@@ -32,7 +34,7 @@ const ProfileStatusWithHooks = () => {
     return (
         <div>
             {!editMode && <div>
-                <b>Status :</b> <span onDoubleClick={activateEditMode}>{status || "------"}</span>
+                <b>Status :</b> <span onDoubleClick={activateEditMode}>{status || "Yor Status"}</span>
             </div>
             }
             {editMode && <div>

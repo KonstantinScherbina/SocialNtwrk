@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { getStatus, savePhoto, getAnotherProfile, getMyProfile } from '../../../redux/profile-reducer-slice';
+import React from 'react';
+import { setEditMode } from '../../../redux/profile-reducer-slice';
 import s from './ProfileInfo.module.css';
-import Preloader from '../../common/Preloader/Preloader';
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
-import userPhoto from '../../../assets/images/user.png'
-import ProfileDataForm from '../ProfileDataForm';
 
+// info about user
+const ProfileData = ({ profile, myId, err }) => {
 
-const ProfileData = ({ profile, myId, goToEditMode }) => {
+    const dispatch = useDispatch()
+    debugger
 
     return <div>
-        {myId && <div><button onClick={goToEditMode}>Edit</button></div>}
+        {myId && <button onClick={() => dispatch(setEditMode(true))}>Edit</button>}
         <div>
             <b>Full Name</b>: {profile.fullName}
         </div>
@@ -31,7 +29,12 @@ const ProfileData = ({ profile, myId, goToEditMode }) => {
                 return <Contact key={key} contactTitle={key} contactValue={profile.contacts[key]} />
             })}
         </div>
-        <div><ProfileStatusWithHooks /></div>
+        <div>
+            <ProfileStatusWithHooks />
+        </div>
+        <div>
+            {err && <dvi>{err}</dvi>}
+        </div>
     </div>
 }
 

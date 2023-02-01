@@ -2,6 +2,8 @@ import React from 'react';
 import s from './../Dialogs.module.css';
 import {NavLink} from "react-router-dom";
 
+
+// penpals
 const DialogItem = (props) => {
     let path = "/dialogs/" + props.id;
 

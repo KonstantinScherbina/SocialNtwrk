@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { myProfileInfoThunk } from '../../redux/profile-reducer-slice';
-import ProfileStatusWithHooks from './ProfileInfo/ProfileStatusWithHooks';
+import { getMyProfile, myProfileInfoThunk, setEditMode } from '../../../redux/profile-reducer-slice';
+import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 
 const ProfileDataForm = () => {
     const profile = useSelector((store) => store.profilePage.profile)
@@ -19,14 +19,18 @@ const ProfileOwnData = (props) => {
 
     const dispatch = useDispatch()
 
+    const myid = props.profile.userId
+
     const onSubmit = (data) => {
 
-        console.log(data)
-
+        debugger
         dispatch(myProfileInfoThunk(data))
+        dispatch(setEditMode(false))
+        dispatch(getMyProfile(myid))
     }
 
     return <form onSubmit={handleSubmit(onSubmit)}>
+        <> <input type="submit" /> </>
         <div>
             Full Name:
             <input type={"text"} defaultValue={props.profile.fullName} {...register("fullName")} />
@@ -54,8 +58,6 @@ const ProfileOwnData = (props) => {
         <div>
             <ProfileStatusWithHooks />
         </div>
-
-        <input type="submit" />
 
         {/* <div>
             {props.isError && props.isErrorMessage}
