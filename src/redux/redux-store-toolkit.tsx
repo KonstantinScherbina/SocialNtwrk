@@ -6,6 +6,7 @@ import authReducerSlice from "./auth-reducer-slice";
 import usersReducerSlice from "./users-reducer-slice";
 import appReducerSlice from "./app-reducer-slice";
 
+
 let reducers = combineReducers({
     auth: authReducerSlice,
     profilePage: profileReducerSlice,
@@ -17,7 +18,10 @@ let reducers = combineReducers({
 
 let store = configureStore({ reducer: reducers });
 
-window.store = store;
 
 
+
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 export default store;

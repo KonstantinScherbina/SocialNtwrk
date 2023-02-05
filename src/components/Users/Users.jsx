@@ -68,7 +68,7 @@ let Users = (props) => {
                             ? <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
 
                                 dispatch(toggleFollowingProgress({ isFetch: true, id: u.id }))
-                                usersAPI.deleteUserSubscribe(u)
+                                usersAPI.deleteUserSubscribe(u.id)
                                     .then((data) => {
                                         if (data.resultCode === 0) {
                                             dispatch(unfollowUsers(u.id))
@@ -79,7 +79,7 @@ let Users = (props) => {
                             : <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
 
                                 dispatch(toggleFollowingProgress({ isFetch: true, id: u.id }))
-                                usersAPI.addUserSubscribe(u)
+                                usersAPI.addUserSubscribe(u.id)
                                     .then((data) => {
                                         if (data.resultCode === 0) {
                                             dispatch(followUsers(u.id))

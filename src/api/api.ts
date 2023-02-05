@@ -1,4 +1,5 @@
 import axios from "axios"
+import { IMyProfileInfoThunk } from "../redux/profile-reducer-slice";
 
 
 const instance = axios.create({
@@ -15,26 +16,27 @@ export const usersAPI = {
     // },
 
     // fetch users on single page from server
-    getUsersPageSize(pageSize = 10) {
+    getUsersPageSize(pageSize: number | null = 10) {
         return instance.get(`users?count=${pageSize}`)
             .then(response => { return response.data })
     },
 
     // fetch some page from server
-    getUsersPageNumber(pageNumber) {
+    getUsersPageNumber(pageNumber: number | null) {
         return instance.get(`users?page=${pageNumber}`)
             .then(response => { return response.data })
     },
 
     // unsubscribe from user
-    deleteUserSubscribe(u) {
-        return instance.delete(`follow/${u.id}`)
+    deleteUserSubscribe(uId: number | null) {
+        return instance.delete(`follow/${uId}`)
             .then(response => { return response.data })
     },
 
     // subscribe to user
-    addUserSubscribe(u) {
-        return instance.post(`follow/${u.id}`)
+    addUserSubscribe(uId: number | null) {
+        debugger
+        return instance.post(`follow/${uId}`)
             .then(response => { return response.data })
     },
 
@@ -45,7 +47,12 @@ export const usersAPI = {
     },
 
     // send data to api for authorizeing on server
-    authAPILogIn(email, password, rememberMe = false) {
+    // authAPILogIn(email: any, password: any, rememberMe: boolean = false) {
+    //     debugger
+    //     return instance.post(`auth/login`, { email, password, rememberMe })
+    //         .then(response => { return response.data })
+    // }
+    authAPILogIn(email: any, password: any, rememberMe: boolean = false) {
         debugger
         return instance.post(`auth/login`, { email, password, rememberMe })
             .then(response => { return response.data })
@@ -59,31 +66,31 @@ export const usersAPI = {
     },
 
     // fetch another profile from server
-    getProfile(userId) {
+    getProfile(userId: number | null) {
         return instance.get(`profile/${userId}`)
             .then(response => { return response.data })
     },
 
     // fetch my profile to server
-    getMyProfile(myId) {
+    getMyProfile(myId: number | null) {
         return instance.get(`profile/${myId}`)
             .then(response => { return response.data })
     },
 
     // fetch profile status from server
-    getStatus(userId) {
+    getStatus(userId: number | null) {
         return instance.get(`profile/status/${userId}`)
             .then(response => { return response.data })
     },
 
     // send my profile status to server
-    updateStatus(status) {
+    updateStatus(status: string | null) {
         return instance.put(`profile/status`, { status })
             .then(response => { return response.data })
     },
 
     // send my Photo to server
-    savePhoto(photoFile) {
+    savePhoto(photoFile: any) {
         const formData = new FormData();
         formData.append("image", photoFile)
 
@@ -97,7 +104,7 @@ export const usersAPI = {
     },
 
     // send personal info to server
-    updateProfileInfo(profileInfo) {
+    updateProfileInfo(profileInfo: IMyProfileInfoThunk | null) {
         debugger
         return instance.put(`profile/`, profileInfo)
             .then(response => { return response.data })

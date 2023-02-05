@@ -20,7 +20,8 @@ const ProfileInfo = () => {
     const profile = useSelector((state) => state.profilePage.profile)
     const profileErr = useSelector((state) => state.profilePage.error)
     const myId = useSelector((state) => state.auth.id)
-    const profilePhoto = useSelector((state) => state.profilePage.profile.photos)
+    debugger
+    // const profilePhoto = useSelector((state) => state.profilePage.profile.photos)
     const editMode = useSelector((state) => state.profilePage.editMode)
 
     debugger
@@ -62,7 +63,7 @@ const ProfileInfo = () => {
                     src='https://c4.wallpaperflare.com/wallpaper/39/346/426/digital-art-men-city-futuristic-night-hd-wallpaper-preview.jpg' />
             </div>
             <div className={s.descriptionBlock}>
-                <img src={profilePhoto.large || userPhoto} className={s.mainPhoto} />
+                <img src={profile.photos.large || userPhoto} className={s.mainPhoto} />
                 {myId && <input type={"file"} onChange={onMainPhotoSelected} />}
                 {editMode ? <ProfileDataForm /> : <ProfileData profile={profile} myId={myId} err={profileErr} />}
             </div>
