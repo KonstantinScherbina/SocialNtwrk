@@ -10,7 +10,7 @@ const Login = () => {
 
     const errorCodeFromAPI = useSelector((store) => store.auth.isError)
     const errorMessageFromAPI = useSelector((store) => store.auth.errorMessage)
-    const captchaFromAPI = useSelector((store) => store.auth.captchaObj.captcha)
+    const captchaFromAPI = useSelector((store) => store.auth.captcha)
 
     debugger
 

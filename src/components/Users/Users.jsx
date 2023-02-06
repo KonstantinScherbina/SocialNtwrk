@@ -16,12 +16,13 @@ let Users = (props) => {
     const [pages, setPages] = useState([])
 
 
-    useEffect(() => {
-        dispatch(getUsersPage(props.currentPage))
-    }, [props.currentPage])
+    // useEffect(() => {
+    //     dispatch(getUsersPage(props.currentPage))
+    // }, [props.currentPage])
 
     useEffect(() => {
-        dispatch(getUsersPageSize(props.pageSize))
+        dispatch(getUsersPage({ pageSize: props.pageSize, pageNumber: props.currentPage }))
+        debugger
         for (let i = 1; i <= props.pagesCount; i++) {
             setPages(pages => [...pages, i])
         }
@@ -29,7 +30,7 @@ let Users = (props) => {
 
 
     let onPageChanged = (pageNumber) => {
-        dispatch(getUsersPage(pageNumber))
+        dispatch(getUsersPage({ pageSize: props.pageSize, pageNumber: pageNumber }))
     }
 
 
@@ -70,6 +71,7 @@ let Users = (props) => {
                                 dispatch(toggleFollowingProgress({ isFetch: true, id: u.id }))
                                 usersAPI.deleteUserSubscribe(u.id)
                                     .then((data) => {
+                                        debugger
                                         if (data.resultCode === 0) {
                                             dispatch(unfollowUsers(u.id))
                                         }

@@ -1,5 +1,7 @@
 import axios from "axios"
-import { IMyProfileInfoThunk } from "../redux/profile-reducer-slice";
+import { IapiResponseResult } from "../redux/auth-reducer-slice";
+import { IMyProfileInfoThunk, IProfileInfo } from "../redux/profile-reducer-slice";
+import { IuserSubscribe, IpageSizAndNumber } from "../redux/users-reducer-slice";
 
 
 const instance = axios.create({
@@ -16,32 +18,33 @@ export const usersAPI = {
     // },
 
     // fetch users on single page from server
-    getUsersPageSize(pageSize: number | null = 10) {
-        return instance.get(`users?count=${pageSize}`)
-            .then(response => { return response.data })
-    },
+    // getUsersPageSize(pageSize: number | null = 10): Promise<IgetUsersPageSize> {
+    //     return instance.get(`users?count=${pageSize}`)
+    //         .then(response => { return response.data })
+    // },
 
     // fetch some page from server
-    getUsersPageNumber(pageNumber: number | null) {
-        return instance.get(`users?page=${pageNumber}`)
+    getUsersPageNumber(pageNumber: number | null, pageSize: number = 10): Promise<IpageSizAndNumber> {
+        debugger
+        return instance.get(`users?page=${pageNumber}&count=${pageSize}`)
             .then(response => { return response.data })
     },
 
     // unsubscribe from user
-    deleteUserSubscribe(uId: number | null) {
+    deleteUserSubscribe(uId: number | null): Promise<IuserSubscribe> {
         return instance.delete(`follow/${uId}`)
             .then(response => { return response.data })
     },
 
     // subscribe to user
-    addUserSubscribe(uId: number | null) {
+    addUserSubscribe(uId: number | null): Promise<IuserSubscribe> {
         debugger
         return instance.post(`follow/${uId}`)
             .then(response => { return response.data })
     },
 
     // fetch autorized or not on server
-    authAPIMe() {
+    authAPIMe(): Promise<IapiResponseResult> {
         return instance.get(`auth/me`)
             .then(response => { return response.data })
     },
@@ -52,45 +55,46 @@ export const usersAPI = {
     //     return instance.post(`auth/login`, { email, password, rememberMe })
     //         .then(response => { return response.data })
     // }
-    authAPILogIn(email: any, password: any, rememberMe: boolean = false) {
+    authAPILogIn(email: string, password: string, rememberMe: boolean = false): Promise<IapiResponseResult> {
         debugger
         return instance.post(`auth/login`, { email, password, rememberMe })
             .then(response => { return response.data })
     },
 
     // unAuthorizeing from server
-    authAPILogOut() {
+    authAPILogOut(): Promise<IapiResponseResult> {
         debugger
         return instance.delete(`auth/login`)
             .then(response => { return response.data })
     },
 
     // fetch another profile from server
-    getProfile(userId: number | null) {
+    getProfile(userId: number | null): Promise<IProfileInfo> {
         return instance.get(`profile/${userId}`)
             .then(response => { return response.data })
     },
 
     // fetch my profile to server
-    getMyProfile(myId: number | null) {
+    getMyProfile(myId: number | null): Promise<IProfileInfo> {
         return instance.get(`profile/${myId}`)
             .then(response => { return response.data })
     },
 
     // fetch profile status from server
-    getStatus(userId: number | null) {
+    getStatus(userId: number | null): Promise<string> {
+        debugger
         return instance.get(`profile/status/${userId}`)
             .then(response => { return response.data })
     },
 
     // send my profile status to server
-    updateStatus(status: string | null) {
+    updateStatus(status: string | null): Promise<IapiResponseResult> {
         return instance.put(`profile/status`, { status })
             .then(response => { return response.data })
     },
 
     // send my Photo to server
-    savePhoto(photoFile: any) {
+    savePhoto(photoFile: any): Promise<IapiResponseResult> {
         const formData = new FormData();
         formData.append("image", photoFile)
 
@@ -104,7 +108,7 @@ export const usersAPI = {
     },
 
     // send personal info to server
-    updateProfileInfo(profileInfo: IMyProfileInfoThunk | null) {
+    updateProfileInfo(profileInfo: IMyProfileInfoThunk | null): Promise<IapiResponseResult> {
         debugger
         return instance.put(`profile/`, profileInfo)
             .then(response => { return response.data })
@@ -112,7 +116,7 @@ export const usersAPI = {
 }
 
 // fetch captcha image from server
-export const securityAPI = {
+export const securityAPI: { getCaptchaUrl(): Promise<string> } = {
     getCaptchaUrl() {
         return instance.get(`security/get-captcha-url`)
             .then(response => { return response.data })

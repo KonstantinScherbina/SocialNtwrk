@@ -1,26 +1,30 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getAuthUserData } from "./auth-reducer-slice";
 
 // whaiting responses of all fetches to API and then show App
-export const initializApp = createAsyncThunk(
-    'authReducerSlice/getAuthUserData', async (_, { rejectWithValue, dispatch }) => {
+export const initializApp = createAsyncThunk<void, void>(
+    'authReducerSlice/getAuthUserData', async (_, { dispatch }) => {
         debugger
         const promiseAuthData = dispatch(getAuthUserData())
         Promise.all([promiseAuthData]).then(() => {
             debugger
             dispatch(initializing(true))
         })
-debugger
+        debugger
     }
 )
 
+interface IInitialState {
+    initialized: boolean
+}
+const initialState: IInitialState = {
+    initialized: false
+}
 const appReducerSlice = createSlice({
     name: 'appReducerSlice',
-    initialState: {
-        initialized: false
-    },
+    initialState,
     reducers: {
-        initializing(state, action) {
+        initializing(state, action: PayloadAction<boolean>) {
             state.initialized = action.payload
         },
     }

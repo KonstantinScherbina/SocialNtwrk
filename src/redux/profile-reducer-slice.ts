@@ -7,10 +7,11 @@ export const getAnotherProfile = createAsyncThunk<any, number | null>(
     'profileReducerSlice/getAnotherProfile', async (userId, { rejectWithValue, dispatch }) => {
         try {
             dispatch(toggleIsFetchingAction(true))
-            const getAnotherProfileUserId: IProfileInfo = await usersAPI.getProfile(userId)
+            const getAnotherProfileUserId = await usersAPI.getProfile(userId)
             debugger
             dispatch(toggleIsFetchingAction(false))
             dispatch(setUserProfileAction(getAnotherProfileUserId))
+            dispatch(getStatus(userId))
         } catch (err: any) {
             return rejectWithValue(err.response.data)
         }
@@ -31,6 +32,7 @@ export const getMyProfile = createAsyncThunk<any, number | null>(
             debugger
             dispatch(toggleIsFetchingAction(false))
             dispatch(setUserProfileAction(getMyProfileUserId))
+            dispatch(getStatus(myId))
             debugger
         } catch (err: any) {
             debugger
@@ -44,26 +46,36 @@ export const getMyProfile = createAsyncThunk<any, number | null>(
 export const getStatus = createAsyncThunk<any, number | null>(
     'profileReducerSlice/getStatus', async (userId, { rejectWithValue, dispatch }) => {
         try {
-            const getStatus: string = await usersAPI.getStatus(userId)
-            dispatch(setUserStatus(getStatus))
+            const getStat: string = await usersAPI.getStatus(userId)
+            debugger
+            dispatch(setUserStatus(getStat))
         } catch (err: any) {
             return rejectWithValue(err.response.data)
         }
     }
 )
 
-interface IResultCodeStatus<T> {
-    data: { photos?: { large: T, small: T } }
-    fieldsErrors: any[]
-    messages: any[]
-    resultCode: number
-}
+// export interface IapiResponseResult {
+//     data: { photos?: { large: string, small: string } }
+//     fieldsErrors: any[]
+//     messages: string[]
+//     resultCode: number
+// }
+
+
+
+// export interface IResultCodePhoto {
+//     data: { photos?: { large: string, small: string } }
+//     fieldsErrors: any[]
+//     messages: any[]
+//     resultCode: number
+// }
 
 // sending status to API and dispatching the received status to reducer
 export const updateStatus = createAsyncThunk<any, string | null>(
     'profileReducerSlice/updateStatus', async (status, { rejectWithValue, dispatch }) => {
         try {
-            const resultCodeStatus: IResultCodeStatus<string> = await usersAPI.updateStatus(status)
+            const resultCodeStatus = await usersAPI.updateStatus(status)
             debugger
             if (resultCodeStatus.resultCode === 0) {
                 dispatch(setUserStatus(status))
@@ -78,7 +90,7 @@ export const updateStatus = createAsyncThunk<any, string | null>(
 export const savePhoto = createAsyncThunk<any, any | null>(
     'profileReducerSlice/savePhoto', async (photoFile, { rejectWithValue, dispatch }) => {
         try {
-            const resultCodeProfilePhoto: IResultCodeStatus<string> = await usersAPI.savePhoto(photoFile)
+            const resultCodeProfilePhoto = await usersAPI.savePhoto(photoFile)
             debugger
             if (resultCodeProfilePhoto.resultCode === 0) {
                 dispatch(setProfilePhotos(resultCodeProfilePhoto.data.photos))
@@ -128,7 +140,7 @@ export const myProfileInfoThunk = createAsyncThunk<any, IMyProfileInfoThunk>(
     }
 )
 
-interface IProfileInfo {
+export interface IProfileInfo {
     aboutMe: string | null
     contacts: {
         facebook: string | null
@@ -165,9 +177,9 @@ interface IInitialState {
 }
 
 interface INewPost {
-    id: number
-    message: any
-    likesCount: number
+    id: number | null
+    message: string | null
+    likesCount: number | null
 }
 
 // type a = typeof initialState
@@ -206,6 +218,8 @@ const profileReducerSlice = createSlice({
             debugger
             let id = state.posts.map(p => p.id)
             let idsp: any = id.slice(-1)
+            console.log(idsp.typeof)
+            debugger
             let newPost: INewPost = {
                 id: ++idsp,
                 message: action.payload,
@@ -224,7 +238,8 @@ const profileReducerSlice = createSlice({
             debugger
             state.profile = action.payload
         },
-        setUserStatus(state, action) {
+        setUserStatus(state, action: PayloadAction<any>) {
+            debugger
             state.status = action.payload
         },
         setProfilePhotos(state, action) {
