@@ -1,7 +1,6 @@
 import axios from "axios"
-import { IapiResponseResult } from "../redux/auth-reducer-slice";
-import { IMyProfileInfoThunk, IProfileInfo } from "../redux/profile-reducer-slice";
-import { IuserSubscribe, IpageSizAndNumber } from "../redux/users-reducer-slice";
+// import { IapiResponseResult } from "../redux/auth-reducer-slice";
+import { IapiResponseResult, IprofileInfo, IpageSizAndNumber } from "../types/types";
 
 
 const instance = axios.create({
@@ -31,13 +30,13 @@ export const usersAPI = {
     },
 
     // unsubscribe from user
-    deleteUserSubscribe(uId: number | null): Promise<IuserSubscribe> {
+    deleteUserSubscribe(uId: number | null): Promise<IapiResponseResult> {
         return instance.delete(`follow/${uId}`)
             .then(response => { return response.data })
     },
 
     // subscribe to user
-    addUserSubscribe(uId: number | null): Promise<IuserSubscribe> {
+    addUserSubscribe(uId: number | null): Promise<IapiResponseResult> {
         debugger
         return instance.post(`follow/${uId}`)
             .then(response => { return response.data })
@@ -69,13 +68,13 @@ export const usersAPI = {
     },
 
     // fetch another profile from server
-    getProfile(userId: number | null): Promise<IProfileInfo> {
+    getProfile(userId: number | null): Promise<IprofileInfo> {
         return instance.get(`profile/${userId}`)
             .then(response => { return response.data })
     },
 
     // fetch my profile to server
-    getMyProfile(myId: number | null): Promise<IProfileInfo> {
+    getMyProfile(myId: number | null): Promise<IprofileInfo> {
         return instance.get(`profile/${myId}`)
             .then(response => { return response.data })
     },
@@ -88,13 +87,13 @@ export const usersAPI = {
     },
 
     // send my profile status to server
-    updateStatus(status: string | null): Promise<IapiResponseResult> {
+    updateStatus(status: string| null): Promise<IapiResponseResult> {
         return instance.put(`profile/status`, { status })
             .then(response => { return response.data })
     },
 
     // send my Photo to server
-    savePhoto(photoFile: any): Promise<IapiResponseResult> {
+    savePhoto(photoFile: File): Promise<IapiResponseResult> {
         const formData = new FormData();
         formData.append("image", photoFile)
 
@@ -108,7 +107,7 @@ export const usersAPI = {
     },
 
     // send personal info to server
-    updateProfileInfo(profileInfo: IMyProfileInfoThunk | null): Promise<IapiResponseResult> {
+    updateProfileInfo(profileInfo: IprofileInfo | null): Promise<IapiResponseResult> {
         debugger
         return instance.put(`profile/`, profileInfo)
             .then(response => { return response.data })

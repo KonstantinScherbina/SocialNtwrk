@@ -1,60 +1,33 @@
 import React, { useEffect } from 'react';
 import styles from './users.module.css';
 import userPhoto from '../../assets/images/download.png'
-import { followUsers, unfollowUsers, toggleFollowingProgress, getUsersPageSize, getUsersPage } from '../../redux/users-reducer-slice'
+import { followUsers, unfollowUsers, toggleFollowingProgress } from '../../redux/users-reducer-slice'
 import Preloader from '../common/Preloader/Preloader'
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { usersAPI } from '../../api/api';
+import { IusersProps } from '../../types/types';
+import { useAppDispatch } from '../../hook';
 
 // Component of Users
-let Users = (props) => {
-
-    let dispatch = useDispatch()
-
-    const [pages, setPages] = useState([])
 
 
-    // useEffect(() => {
-    //     dispatch(getUsersPage(props.currentPage))
-    // }, [props.currentPage])
+let Users = (props: IusersProps) => {
 
-    useEffect(() => {
-        dispatch(getUsersPage({ pageSize: props.pageSize, pageNumber: props.currentPage }))
-        debugger
-        for (let i = 1; i <= props.pagesCount; i++) {
-            setPages(pages => [...pages, i])
-        }
-    }, [props.totalItemsCount])
-
-
-    let onPageChanged = (pageNumber) => {
-        dispatch(getUsersPage({ pageSize: props.pageSize, pageNumber: pageNumber }))
-    }
-
-
-    let portionCount = Math.ceil(props.pagesCount / props.portionSize)
-    let [portionNumber, setPortionNumber] = useState(1)
-    let leftPortionPageNumber = (portionNumber - 1) * props.portionSize + 1
-    let rightPortionPageNumber = portionNumber * props.portionSize
-
-    // show new portion of pages left or right
-    useEffect(() => {
-        setPortionNumber(Math.ceil(props.currentPage / props.portionSize))
-    }, [props.currentPage]);
+    let dispatch = useAppDispatch()
 
     if (props.isFetching) {
         return <Preloader />
     } return <div>
         <div>
-            {portionNumber > 1 &&
-                <button onClick={() => { setPortionNumber(portionNumber - 1) }}>PREV</button>}
+            {props.portionNumber > 1 &&
+                <button onClick={() => { props.setPortionNumber(props.portionNumber - 1) }}>PREV</button>}
 
-            {pages.filter(p => p >= leftPortionPageNumber && p <= rightPortionPageNumber).map((p) => {
-                return <span key={p} onClick={(e) => { onPageChanged(p) }}>{p}</span>
+            {props.pages.filter(p => p >= props.leftPortionPageNumber && p <= props.rightPortionPageNumber).map((p) => {
+                return <span key={p} onClick={(e) => { props.onPageChanged(p) }}>{p}</span>
             })}
-            {portionCount > portionNumber && <button onClick={() => { setPortionNumber(portionNumber + 1) }}>NEXT</button>}
+            {props.portionCount > props.portionNumber && <button onClick={() => { props.setPortionNumber(props.portionNumber + 1) }}>NEXT</button>}
         </div>
         <div>
             {props.users.map(u => <div key={u.id}>

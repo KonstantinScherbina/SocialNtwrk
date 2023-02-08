@@ -1,11 +1,12 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../hook';
 import { getMyProfile, myProfileInfoThunk, setEditMode } from '../../../redux/profile-reducer-slice';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 
 const ProfileDataForm = () => {
-    const profile = useSelector((store) => store.profilePage.profile)
+    const profile = useAppSelector((store) => store.profilePage.profile)
 
     return <ProfileOwnData profile={profile} />
 }
@@ -13,17 +14,17 @@ const ProfileDataForm = () => {
 
 
 
-const ProfileOwnData = (props) => {
+const ProfileOwnData = (props: any) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur",
     });
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const myid = props.profile.userId
 
-    const onSubmit = (data) => {
+    const onSubmit = (data: any) => {
 
         debugger
         dispatch(myProfileInfoThunk(data))

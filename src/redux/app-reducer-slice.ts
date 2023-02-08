@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IinitialStateApp } from "../types/types";
 import { getAuthUserData } from "./auth-reducer-slice";
 
 // whaiting responses of all fetches to API and then show App
@@ -14,10 +15,10 @@ export const initializApp = createAsyncThunk<void, void>(
     }
 )
 
-interface IInitialState {
-    initialized: boolean
-}
-const initialState: IInitialState = {
+// interface IinitialStateApp {
+//     initialized: boolean
+// }
+const initialState: IinitialStateApp = {
     initialized: false
 }
 const appReducerSlice = createSlice({

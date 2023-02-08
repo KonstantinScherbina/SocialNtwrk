@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Navigate, useMatch } from "react-router-dom";
 import React from 'react';
+import { useAppSelector } from "../hook";
 
 // export const withAuthRedirect = (Component) => {
 //     const authRdrct = () => {
@@ -25,10 +26,10 @@ import React from 'react';
 //----------------------------------------------------------
 
 
-
-export const withAuthRedirect = (Component) => {
+// undefinded ???????????????????????? 
+export const withAuthRedirect = (Component: (props: any) => JSX.Element) => {
     let RouterComponent = () => {
-        let isAuth = useSelector(store => store.auth.isAuth)
+        let isAuth = useAppSelector(store => store.auth.isAuth)
         if (!isAuth) return <Navigate to={`/login`} />
         return <Component />
     }

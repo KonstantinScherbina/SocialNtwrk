@@ -4,7 +4,7 @@ import MyPosts from './MyPosts/MyPosts';
 import { compose } from 'redux';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 
-const Profile = () => {
+const Profile = (props: any) => {
     debugger
     return (
         <div>

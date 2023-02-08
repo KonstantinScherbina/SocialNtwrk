@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { usersAPI } from "../api/api";
+import { IinitialStateProfile, InewPost, IprofileInfo } from "../types/types";
 
 // request to get ANOTHER profile Page from API by 'userId' from useParams
 // dispatch another profile page data to reducer
@@ -28,7 +29,7 @@ export const getMyProfile = createAsyncThunk<any, number | null>(
         try {
             debugger
             dispatch(toggleIsFetchingAction(true))
-            const getMyProfileUserId: IProfileInfo = await usersAPI.getMyProfile(myId)
+            const getMyProfileUserId: IprofileInfo = await usersAPI.getMyProfile(myId)
             debugger
             dispatch(toggleIsFetchingAction(false))
             dispatch(setUserProfileAction(getMyProfileUserId))
@@ -46,7 +47,7 @@ export const getMyProfile = createAsyncThunk<any, number | null>(
 export const getStatus = createAsyncThunk<any, number | null>(
     'profileReducerSlice/getStatus', async (userId, { rejectWithValue, dispatch }) => {
         try {
-            const getStat: string = await usersAPI.getStatus(userId)
+            const getStat = await usersAPI.getStatus(userId)
             debugger
             dispatch(setUserStatus(getStat))
         } catch (err: any) {
@@ -55,24 +56,9 @@ export const getStatus = createAsyncThunk<any, number | null>(
     }
 )
 
-// export interface IapiResponseResult {
-//     data: { photos?: { large: string, small: string } }
-//     fieldsErrors: any[]
-//     messages: string[]
-//     resultCode: number
-// }
-
-
-
-// export interface IResultCodePhoto {
-//     data: { photos?: { large: string, small: string } }
-//     fieldsErrors: any[]
-//     messages: any[]
-//     resultCode: number
-// }
 
 // sending status to API and dispatching the received status to reducer
-export const updateStatus = createAsyncThunk<any, string | null>(
+export const updateStatus = createAsyncThunk<any, string>(
     'profileReducerSlice/updateStatus', async (status, { rejectWithValue, dispatch }) => {
         try {
             const resultCodeStatus = await usersAPI.updateStatus(status)
@@ -87,11 +73,10 @@ export const updateStatus = createAsyncThunk<any, string | null>(
 )
 
 // sending Photo to API and dispatching the received Photo to reducer
-export const savePhoto = createAsyncThunk<any, any | null>(
+export const savePhoto = createAsyncThunk<void | string, File>(
     'profileReducerSlice/savePhoto', async (photoFile, { rejectWithValue, dispatch }) => {
         try {
             const resultCodeProfilePhoto = await usersAPI.savePhoto(photoFile)
-            debugger
             if (resultCodeProfilePhoto.resultCode === 0) {
                 dispatch(setProfilePhotos(resultCodeProfilePhoto.data.photos))
             }
@@ -100,38 +85,34 @@ export const savePhoto = createAsyncThunk<any, any | null>(
         }
     }
 )
-debugger
 
 
-export interface IMyProfileInfoThunk {
-    aboutMe: string
-    contacts: {
-        facebook: string
-        github: string
-        instagram: string
-        mainLink: string
-        twitter: string
-        vk: string
-        website: string
-        youtube: string
-    }
-    fullName: string
-    lookingForAJobDescription: string
-    lookingForAjob: boolean
-}
+// export interface IMyProfileInfoThunk {
+//     aboutMe: string
+//     contacts: {
+//         facebook: string
+//         github: string
+//         instagram: string
+//         mainLink: string
+//         twitter: string
+//         vk: string
+//         website: string
+//         youtube: string
+//     }
+//     fullName: string
+//     lookingForAJobDescription: string
+//     lookingForAjob: boolean
+// }
 
 // sending my profile status to API and dispatching the status to reducer
-export const myProfileInfoThunk = createAsyncThunk<any, IMyProfileInfoThunk>(
+export const myProfileInfoThunk = createAsyncThunk<any, IprofileInfo>(
     'profileReducerSlice/profileInfoData', async (profileInfo, { rejectWithValue, dispatch }) => {
         try {
-            debugger
             const resultCodeProfileInfo = await usersAPI.updateProfileInfo(profileInfo)
-            debugger
             if (resultCodeProfileInfo.resultCode === 0) {
                 console.log(resultCodeProfileInfo.resultCode)
             }
         } catch (err: any) {
-            debugger
             console.log(err)
             // return rejectWithValue(err.response.data.message)
             // const error = rejectWithValue(err.response.data.message)
@@ -140,74 +121,79 @@ export const myProfileInfoThunk = createAsyncThunk<any, IMyProfileInfoThunk>(
     }
 )
 
-export interface IProfileInfo {
-    aboutMe: string | null
-    contacts: {
-        facebook: string | null
-        github: string | null
-        instagram: string | null
-        mainLink: string | null
-        twitter: string | null
-        vk: string | null
-        website: string | null
-        youtube: string | null
-    }
-    fullName: string
-    lookingForAJob: boolean
-    lookingForAJobDescription: string | null
-    photos: {
-        small: string | null,
-        large: string | null
-    }
-    userId: number | null
-}
-
-interface IInitialState {
-    isFetching: boolean
-    profile: IProfileInfo | null
-    photos: string | null
-    status: string | null
-    posts: {
-        id: number | null
-        message: string | null
-        likesCount: number | null
-    }[]
-    editMode: boolean
-    error: string | null
-}
-
-interface INewPost {
-    id: number | null
-    message: string | null
-    likesCount: number | null
-}
-
-// type a = typeof initialState
-
-//  const initialState = {
-//     isFetching: false,
-//     profile: '',
-//     photos: '',
-//     status: '',
-//     posts: [
-//         { id: 1, message: 'Hi, how are you?', likesCount: 12 },
-//         { id: 2, message: 'Hi, how are you?', likesCount: 12 },
-//     ],
-//     editMode: false,
-//     error: ''
+// export interface IProfileInfo {
+//     aboutMe: string | null
+//     contacts: {
+//         facebook: string | null
+//         github: string | null
+//         instagram: string | null
+//         mainLink: string | null
+//         twitter: string | null
+//         vk: string | null
+//         website: string | null
+//         youtube: string | null
+//     }
+//     fullName: string
+//     lookingForAJob: boolean
+//     lookingForAJobDescription: string | null
+//     photos: {
+//         small: string | null,
+//         large: string | null
+//     }
+//     userId: number | null
 // }
 
-const initialState: IInitialState = {
+// interface IInitialState {
+//     isFetching: boolean
+//     profile: IProfileInfo | null
+//     photos: string | null
+//     status: string | null
+//     posts: {
+//         id: number | null
+//         message: string | null
+//         likesCount: number | null
+//     }[]
+//     editMode: boolean
+//     error: string | null
+// }
+
+// interface INewPost {
+//     id: number | null
+//     message: string | null
+//     likesCount: number | null
+// }
+
+
+const initialState: IinitialStateProfile = {
     isFetching: false,
-    profile: null,
-    photos: '',
+    profile: {
+        aboutMe: null,
+        contacts: {
+            facebook: null,
+            github: null,
+            instagram: null,
+            mainLink: null,
+            twitter: null,
+            vk: null,
+            website: null,
+            youtube: null,
+        },
+        fullName: null,
+        lookingForAJob: false,
+        lookingForAJobDescription: null,
+        photos: {
+            small: null,
+            large: null
+        },
+        userId: null
+    },
     status: '',
     posts: [
         { id: 1, message: 'Hi, how are you?', likesCount: 12 },
         { id: 2, message: 'Hi, how are you?', likesCount: 12 },
     ],
     editMode: false,
-    error: ''
+    error: null
 }
 
 const profileReducerSlice = createSlice({
@@ -215,17 +201,17 @@ const profileReducerSlice = createSlice({
     initialState,
     reducers: {
         addPostAction(state, action) {
-            debugger
+
             let id = state.posts.map(p => p.id)
-            let idsp: any = id.slice(-1)
-            console.log(idsp.typeof)
-            debugger
-            let newPost: INewPost = {
-                id: ++idsp,
+            let idU: any = id.slice(-1)
+
+
+            let newPost: InewPost = {
+                id: ++idU,
                 message: action.payload,
                 likesCount: 0
             };
-            debugger
+
             state.posts.push(newPost)
         },
         deletePostAction(state, action) {
@@ -234,29 +220,23 @@ const profileReducerSlice = createSlice({
         toggleIsFetchingAction(state, action: PayloadAction<boolean>) {
             state.isFetching = action.payload
         },
-        setUserProfileAction(state, action: PayloadAction<IProfileInfo>) {
-            debugger
+        setUserProfileAction(state, action: PayloadAction<IprofileInfo>) {
             state.profile = action.payload
         },
-        setUserStatus(state, action: PayloadAction<any>) {
-            debugger
+        setUserStatus(state, action: PayloadAction<string>) {
             state.status = action.payload
         },
-        setProfilePhotos(state, action) {
-            state.photos = action.payload
+        setProfilePhotos(state, action: PayloadAction<{ large: string, small: string }>) {
+            state.profile.photos = action.payload
         },
         setEditMode(state, action) {
-            debugger
             state.editMode = action.payload
         },
         setError(state, action) {
-            debugger
             state.error = action.payload
         }
     }
 })
-
-console.log(profileReducerSlice)
 
 export default profileReducerSlice.reducer
 export const {

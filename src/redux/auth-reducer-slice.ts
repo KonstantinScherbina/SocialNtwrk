@@ -1,29 +1,18 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { securityAPI, usersAPI } from "../api/api";
+import { IinitialStateAuth, ImyAuthData } from "../types/types";
 
-
-// export interface IapiResponseAuth {
+// export interface IapiResponseResult {
 //     data: {
-//         id: number,
-//         login: string,
-//         email: string
+//         id?: number,
+//         login?: string,
+//         email?: string
+//         photos?: { large: string, small: string }
 //     },
 //     resultCode: number,
 //     fieldsErrors?: any[],
 //     messages?: string[]
 // }
-
-export interface IapiResponseResult {
-    data: {
-        id?: number,
-        login?: string,
-        email?: string
-        photos?: { large: string, small: string }
-    },
-    resultCode: number,
-    fieldsErrors?: any[],
-    messages?: string[]
-}
 
 //TODO fix dublicats
 
@@ -45,19 +34,12 @@ export const getAuthUserData = createAsyncThunk<number, void>(
     }
 )
 
-export interface ImyAuthData {
-    email: string
-    password: string
-    rememberMe: boolean
-}
-
-// export interface IauthAPILogIn {
-//     resultCode: number
-//     messages: string,
-//     data: {
-//         userId: number
-//     }
+// export interface ImyAuthData {
+//     email: string
+//     password: string
+//     rememberMe: boolean
 // }
+
 
 // Send to API authentification datas. If resultcode = 0 (if '10' create 'get' request to API for captcha),
 // create fetch to API for take authentification data
@@ -81,53 +63,6 @@ export const login = createAsyncThunk<void, ImyAuthData>(
 )
 
 
-// export const getAuthUserData = createAsyncThunk<any, void>(
-//     'authReducerSlice/getAuthUserData', async (_, { dispatch }) => {
-//         const userData: userDataType = await usersAPI.authAPIMe()
-//         debugger
-//         if (userData.resultCode === 0) {
-//             debugger
-//             return userData.data
-//         }
-//         return userData.resultCode
-//     }
-
-// )
-
-
-// export const login = createAsyncThunk<any, any>(
-//     'authReducerSlice/login', async (data, { dispatch }) => {
-//         const { email, password, rememberMe } = data
-//         const logIn = await usersAPI.authAPILogIn(email, password, rememberMe)
-//         debugger
-//         if (logIn.resultCode === 0) {
-//             debugger
-//             dispatch(getAuthUserData())
-//         } else if (logIn.resultCode === 10) {
-//             debugger
-//             dispatch(getCaptchaUrlThunk())
-//         } else {
-//             debugger
-//             // return { id: null, login: null, email, isAuth: true, isError: false, errorMessage: logIn.messages, captchaObj: { captcha: null } }
-//             dispatch(setUserDataAction({ id: null, login: null, email, isAuth: true, isError: false, errorMessage: logIn.messages, captchaObj: { captcha: null } }))
-//         }
-//     }
-// )
-
-
-
-// { isError: true, errorMessage: logIn.messages }
-
-
-// export interface IAuthAPI {
-//     fieldsErrors?: string[]
-//     messages: string[]
-//     resultCode: number
-//     data: {
-//         userId?: number
-//     }
-// }
-
 export const logout = createAsyncThunk<void, void>(
     'authReducerSlice/logout', async (_, { dispatch }) => {
         const logOut = await usersAPI.authAPILogOut()
@@ -138,7 +73,6 @@ export const logout = createAsyncThunk<void, void>(
         }
     }
 )
-// { id: null, login: null, email: null, isAuth: false }
 
 // fetch to get Captch for login
 export const getCaptchaUrlThunk = createAsyncThunk<void, void>(
@@ -153,26 +87,18 @@ export const getCaptchaUrlThunk = createAsyncThunk<void, void>(
 )
 
 
-export interface IinitialState {
-    id?: number | null,
-    login?: string | null,
-    email?: string | null,
-    isAuth?: boolean,
-    isError?: boolean,
-    errorMessage?: string[] | null,
-    captcha?: string | null
-}
-
-// export interface ISetUserDataAction {
+// export interface IinitialState {
 //     id?: number | null,
-//     login?: string | null | undefined,
-//     email?: string | null | undefined,
+//     login?: string | null,
+//     email?: string | null,
 //     isAuth?: boolean,
 //     isError?: boolean,
-//     errorMessage?: string | null | undefined
+//     errorMessage?: string[] | null,
+//     captcha?: string | null
 // }
 
-const initialState: IinitialState = {
+
+const initialState: IinitialStateAuth = {
     id: null,
     login: null,
     email: null,
@@ -186,7 +112,7 @@ const authReducerSlice = createSlice({
     name: 'authReducerSlice',
     initialState,
     reducers: {
-        setUserDataAction(state, action: PayloadAction<IinitialState>) {
+        setUserDataAction(state, action: PayloadAction<IinitialStateAuth>) {
             debugger
             state.id = action.payload.id
             state.login = action.payload.login

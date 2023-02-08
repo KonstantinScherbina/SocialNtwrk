@@ -9,6 +9,7 @@ import Preloader from './components/common/Preloader/Preloader';
 import { initializApp } from './redux/app-reducer-slice';
 
 import Profile from './components/Profile/Profile'
+import { useAppDispatch, useAppSelector } from './hook';
 // import UsersContainer from './components/Users/UsersContainer'
 
 
@@ -18,9 +19,9 @@ const UsersContainer = React.lazy(() => import('./components/Users/UsersContaine
 
 const App = () => {
     debugger
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    const initialized = useSelector(store => store.app.initialized)
+    const initialized = useAppSelector(store => store.app.initialized)
 
     useEffect(() => {
         dispatch(initializApp())

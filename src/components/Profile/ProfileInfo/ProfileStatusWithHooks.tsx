@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useAppDispatch, useAppSelector } from "../../../hook"
 import { updateStatus } from "../../../redux/profile-reducer-slice"
+// import Input from "../../input"
 
 
 // status of user on a page
-const ProfileStatusWithHooks = () => {
+const ProfileStatusWithHooks = (props: any) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    const userStatus = useSelector((state) => state.profilePage.status)
+    const userStatus = useAppSelector((state) => state.profilePage.status)
 
     let [editMode, setEditMode] = useState(false)
     let [status, setStatus] = useState(userStatus)
@@ -28,18 +29,19 @@ const ProfileStatusWithHooks = () => {
         dispatch(updateStatus(status))
     }
 
-    const onStatusChange = (e) => {
+    const onStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStatus(e.currentTarget.value)
     }
 
     return (
         <div>
             {!editMode && <div>
-                <b>Status :</b> <span onDoubleClick={activateEditMode}>{userStatus || ""}</span>
+                <b>Status :</b> <span onDoubleClick={activateEditMode}>{userStatus || "Hey! I'm your staus"}</span>
             </div>
             }
             {editMode && <div>
-                <input onChange={onStatusChange} value={status} autoFocus={true} onBlur={deactivateEditMode} />
+                <input onChange={onStatusChange} value={status} autoFocus={true} onBlur={deactivateEditMode} placeholder="Hey! I'm your staus" />
+                {/* < Input value={status} onChange={onStatusChange} autoFocus={true} onBlur={deactivateEditMode} placeholder="Hey! I'm your staus" /> */}
             </div>}
         </div>
     )

@@ -3,9 +3,10 @@ import { setEditMode } from '../../../redux/profile-reducer-slice';
 import s from './ProfileInfo.module.css';
 import { useDispatch } from 'react-redux';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
+import { Iconstacts, IprofileInfo } from '../../../types/types';
 
 // info about user
-const ProfileData = ({ profile, myId, err }) => {
+const ProfileData = ({ profile, myId, err, props }: { profile: IprofileInfo, myId: number, err: string | null, props: any }) => {
 
     const dispatch = useDispatch()
     debugger
@@ -26,19 +27,20 @@ const ProfileData = ({ profile, myId, err }) => {
         </div>
         <div>
             <b>Contacts</b>: {Object.keys(profile.contacts).map(key => {
-                return <Contact key={key} contactTitle={key} contactValue={profile.contacts[key]} />
+                debugger
+                return <Contact key={key} contactTitle={key} contactValue={profile.contacts[key as keyof Iconstacts]} />
             })}
         </div>
         <div>
             <ProfileStatusWithHooks />
         </div>
         <div>
-            {err && <dvi>{err}</dvi>}
+            {err && <div>{err}</div>}
         </div>
     </div>
 }
 
-const Contact = ({ contactTitle, contactValue }) => {
+const Contact = ({ contactTitle, contactValue }: { contactTitle: string, contactValue: string | null}) => {
 
     return <div className={s.contact}><b>{contactTitle}</b>:{contactValue}</div>
 

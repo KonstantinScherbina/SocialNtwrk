@@ -1,34 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useEffect } from 'react';
-import { getStatus, savePhoto, getAnotherProfile, getMyProfile, setEditMode } from '../../../redux/profile-reducer-slice';
+import { getStatus, savePhoto, getAnotherProfile, getMyProfile } from '../../../redux/profile-reducer-slice';
 import s from './ProfileInfo.module.css';
 import Preloader from '../../common/Preloader/Preloader';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import userPhoto from '../../../assets/images/user.png'
 import ProfileDataForm from './ProfileDataForm';
 import ProfileData from './ProfileData';
+import { useAppDispatch, useAppSelector } from '../../../hook';
 
-const ProfileInfo = () => {
-    debugger
-    const dispatch = useDispatch()
+const ProfileInfo = (props: any) => {
+
+    const dispatch = useAppDispatch()
     let { userId } = useParams()
-    // const [editMode, setEditMode] = useState(false)
 
+    const profile = useAppSelector((state) => state.profilePage.profile)
+    const profileErr = useAppSelector((state) => state.profilePage.error)
+    const myId = useAppSelector((state) => state.auth.id)
 
-
-    const profile = useSelector((state) => state.profilePage.profile)
-    const profileErr = useSelector((state) => state.profilePage.error)
-    const myId = useSelector((state) => state.auth.id)
-    debugger
     // const profilePhoto = useSelector((state) => state.profilePage.profile.photos)
-    const editMode = useSelector((state) => state.profilePage.editMode)
+    const editMode = useAppSelector((state) => state.profilePage.editMode)
 
-    debugger
+
     // dispatch thunks for get my profile page or another
     useEffect(() => {
         if (userId) {
-            dispatch(getAnotherProfile(userId))
+            dispatch(getAnotherProfile(parseInt(userId)))
         } else {
             dispatch(getMyProfile(myId))
         }
@@ -37,23 +34,21 @@ const ProfileInfo = () => {
     // dispatch thunks for get my profile status or another
     useEffect(() => {
         if (userId) {
-            dispatch(getStatus(userId))
+            dispatch(getStatus(parseInt(userId)))
         } else {
             dispatch(getStatus(myId))
         }
     }, [userId, myId])
 
-    debugger
 
     // dispatch thunk with selected image file to api
-    const onMainPhotoSelected = (e) => {
+    const onMainPhotoSelected = (e: any) => {
         if (e.target.files.length) {
             dispatch(savePhoto(e.target.files[0]))
         }
     }
 
     if (!profile || !myId) {
-        debugger
         return <Preloader />
     } return (
 
@@ -63,9 +58,9 @@ const ProfileInfo = () => {
                     src='https://c4.wallpaperflare.com/wallpaper/39/346/426/digital-art-men-city-futuristic-night-hd-wallpaper-preview.jpg' />
             </div>
             <div className={s.descriptionBlock}>
-                <img src={profile.photos.large || userPhoto} className={s.mainPhoto} />
+                <img src={profile.photos?.large || userPhoto} className={s.mainPhoto} />
                 {myId && <input type={"file"} onChange={onMainPhotoSelected} />}
-                {editMode ? <ProfileDataForm /> : <ProfileData profile={profile} myId={myId} err={profileErr} />}
+                {editMode ? <ProfileDataForm /> : <ProfileData profile={profile} myId={myId} err={profileErr} props={props} />}
             </div>
         </div>
     )
